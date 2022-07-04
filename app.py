@@ -10,6 +10,7 @@ class Hello:
         task_color: str,
         start_date: date,
         task_duration: int,
+        depends_of: list,
         resources: list,
     ):
         self.task_name = task_name
@@ -17,23 +18,24 @@ class Hello:
         self.task_duration = task_duration
         self.project_name = project_name
         self.task_color = task_color
-        self.resources = resources
+        self.depends_of = depends_of
 
-        self.resource_lists = []
+        self.resource_lists = [i for i in resources]
         self.tasks = []
         pass
 
-    def Task(self):
+    def task(self):
         gantt.Task(
             name=self.task_name,
             start=self.start_date,
             duration=self.task_duration,
-            resources=self.resources,
+            resources=[self.resources[]],
         )
         pass
 
+    def export(self):
+        pass
 
-emp = ["Ben", "Alex"]
 
 Ben = gantt.Resource("Ben")
 Alex = gantt.Resource("Alex")
