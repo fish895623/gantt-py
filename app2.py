@@ -15,15 +15,12 @@ class Registering:
             self.in_out = outer
             print(self.in_out)
 
-    def __init__(self):
-        self._out = 'out'
-        self._in = Registering.Inner(self=self)
 
-    class ResourceRegister(Resource):
+    class Resource(Resource):
         def __init__(self, name, fullname=None):
             super().__init__(name, fullname)
 
-    class TaskRegister(Task):
+    class Task(Task):
         def __init__(
             self,
             name,
@@ -63,6 +60,10 @@ class Registering:
             super().__init__(
                 name, start, depends_of, color, fullname, display,
             )
+
+    def __init__(self):
+        self._out = 'out'
+        self.Tasks = Registering.Task(self)
 
 
 class Gantt:
