@@ -2,60 +2,67 @@ from datetime import date, timedelta
 import gantt
 from gantt import Resource, Task, Project, Milestone
 
-from typing import List, Union
+from typing import List
 
 gantt.define_font_attributes(
     fill='black', stroke='black', stroke_width=0, font_family='Verdana'
 )
 
 
-class ResourceRegister(Resource):
-    def __init__(self, name, fullname=None):
-        super().__init__(name, fullname)
+class Registering:
+    class Inner:
+        def __init__(self, outer):
+            self.in_out = outer
+            print(self.in_out)
 
+    def __init__(self):
+        self._out = 'out'
+        self._in = Registering.Inner(self=self)
 
-class TaskRegister(Task):
-    def __init__(
-        self,
-        name,
-        start=None,
-        stop=None,
-        duration=None,
-        depends_of=None,
-        resources=None,
-        percent_done=0,
-        color=None,
-        fullname=None,
-        display=True,
-        state='',
-    ):
-        super().__init__(
+    class ResourceRegister(Resource):
+        def __init__(self, name, fullname=None):
+            super().__init__(name, fullname)
+
+    class TaskRegister(Task):
+        def __init__(
+            self,
             name,
-            start,
-            stop,
-            duration,
-            depends_of,
-            resources,
-            percent_done,
-            color,
-            fullname,
-            display,
-            state,
-        )
+            start=None,
+            stop=None,
+            duration=None,
+            depends_of=None,
+            resources=None,
+            percent_done=0,
+            color=None,
+            fullname=None,
+            display=True,
+            state='',
+        ):
+            super().__init__(
+                name,
+                start,
+                stop,
+                duration,
+                depends_of,
+                resources,
+                percent_done,
+                color,
+                fullname,
+                display,
+                state,
+            )
 
+    class ProjectRegister(Project):
+        def __init__(self, name="", color=None):
+            super().__init__(name, color)
 
-class ProjectRegister(Project):
-    def __init__(self, name="", color=None):
-        super().__init__(name, color)
-
-
-class MilestoneRegister(Milestone):
-    def __init__(
-        self, name, start=None, depends_of=None, color=None, fullname=None, display=True,
-    ):
-        super().__init__(
-            name, start, depends_of, color, fullname, display,
-        )
+    class MilestoneRegister(Milestone):
+        def __init__(
+            self, name, start=None, depends_of=None, color=None, fullname=None, display=True,
+        ):
+            super().__init__(
+                name, start, depends_of, color, fullname, display,
+            )
 
 
 class Gantt:
@@ -107,12 +114,4 @@ class Gantt:
 
 
 if __name__ == '__main__':
-    a = Gantt()
-    a.task(
-        name='Hello2', start=date(2022, 7, 14), stop=date(2022, 7, 26),
-    )
-    a.task(
-        name='Hello', start=date(2022, 7, 20), stop=date(2022, 7, 30), depends_of=['Hello2']
-    )
-    a.project(name='asdfadsf')
-    a.export()
+    Registering.Inner('sdfsdf')
