@@ -1,4 +1,3 @@
 #!/bin/sh
 
 git push
-echo PUSHED
