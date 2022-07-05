@@ -11,6 +11,7 @@ gantt.define_font_attributes(
 class Register:
     def __init__(self) -> None:
         self.Task = TaskRegister(self)
+        self.Resource = ""
         pass
 
 class ResourceRegister(Resource):
