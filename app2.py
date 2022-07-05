@@ -1,18 +1,66 @@
-from calendar import month
 from datetime import date, timedelta
 import gantt
 from gantt import Resource, Task, Project, Milestone
 
-from typing import List
+from typing import List, Union
 
 gantt.define_font_attributes(
     fill='black', stroke='black', stroke_width=0, font_family='Verdana'
 )
 
 
+class ResourceRegister(Resource):
+    def __init__(self, name, fullname=None):
+        super().__init__(name, fullname)
+
+
+class TaskRegister(Task):
+    def __init__(
+        self,
+        name,
+        start=None,
+        stop=None,
+        duration=None,
+        depends_of=None,
+        resources=None,
+        percent_done=0,
+        color=None,
+        fullname=None,
+        display=True,
+        state='',
+    ):
+        super().__init__(
+            name,
+            start,
+            stop,
+            duration,
+            depends_of,
+            resources,
+            percent_done,
+            color,
+            fullname,
+            display,
+            state,
+        )
+
+
+class ProjectRegister(Project):
+    def __init__(self, name="", color=None):
+        super().__init__(name, color)
+
+
+class MilestoneRegister(Milestone):
+    def __init__(
+        self, name, start=None, depends_of=None, color=None, fullname=None, display=True,
+    ):
+        super().__init__(
+            name, start, depends_of, color, fullname, display,
+        )
+
+
 class Gantt:
     def __init__(self) -> None:
-        self.projects: Project = None
+        self.projects: Project
         self.tasks: List[Task] = []
 
     def task(
@@ -35,7 +83,7 @@ class Gantt:
                 start,
                 stop,
                 duration,
-                # depends_of=[Task(name=i) for i in depends_of],
+                depends_of=[self.tasks.index(i) for i in (depends_of or [])],
                 percent_done=percent_done,
                 color=color,
                 fullname=fullname,
@@ -61,16 +109,10 @@ class Gantt:
 if __name__ == '__main__':
     a = Gantt()
     a.task(
-        name='Hello', resources=['hello'], start=date(2022, 7, 20), stop=date(2022, 7, 30),
+        name='Hello2', start=date(2022, 7, 14), stop=date(2022, 7, 26),
     )
     a.task(
-        name='hel2', resources=['hello2'], start=date(2021, 1, 27), stop=date(2021, 2, 26),
-    )
-    a.task(
-        name='h22',
-        resources=['hello', 'hello2'],
-        start=date(2021, 1, 27),
-        stop=date(2021, 3, 1),
+        name='Hello', start=date(2022, 7, 20), stop=date(2022, 7, 30), depends_of=['Hello2']
     )
     a.project(name='asdfadsf')
     a.export()
