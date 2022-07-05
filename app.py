@@ -1,5 +1,8 @@
 from datetime import date
+from typing import List
+
 import gantt
+from gantt import Project, Resource, Task
 
 
 class Hello:
@@ -10,8 +13,9 @@ class Hello:
         task_color: str,
         start_date: date,
         task_duration: int,
-        depends_of: list,
-        resources: list,
+        resources: List[str],
+        filename: str = 'home.html',
+        depends_of: List[str] = [""],
     ):
         self.task_name = task_name
         self.start_date = start_date
@@ -19,53 +23,49 @@ class Hello:
         self.project_name = project_name
         self.task_color = task_color
         self.depends_of = depends_of
+        self.resources = resources
+        self.filename = filename
 
-        self.resource_lists = [i for i in resources]
-        self.tasks = []
+        self.tasks: List[Task] = []
+        self.proj: Project = Project(name=self.project_name)
         pass
 
     def task(self):
-        gantt.Task(
-            name=self.task_name,
-            start=self.start_date,
-            duration=self.task_duration,
-            resources=[self.resources[]],
+        self.tasks.append(
+            gantt.Task(
+                name=self.task_name,
+                start=self.start_date,
+                duration=self.task_duration,
+                resources=[Resource(i) for i in self.resources],
+            )
         )
         pass
 
+    def register_task(self):
+        for task in self.tasks:
+            self.proj.add_task(task=task)
+
     def export(self):
-        pass
+        self.proj.make_svg_for_resources(
+            filename=self.filename,
+            today=date(2021, 1, 27),
+            start=date(2021, 1, 20),
+            end=date(2021, 4, 1),
+        )
 
 
-Ben = gantt.Resource("Ben")
-Alex = gantt.Resource("Alex")
-
-task1_project1 = gantt.Task(
-    name="task1", start=date(2021, 1, 27), duration=13, resources=[Ben], color="#a3ddcb"
-)
-task2_project1 = gantt.Task(
-    name="task2", start=date(2021, 2, 10), duration=8, resources=[Alex], color="#a3ddcb"
-)
-task3_project1 = gantt.Task(
-    name="task3", start=date(2021, 2, 19), duration=10, resources=[Ben], color="#a3ddcb"
-)
-task4_project1 = gantt.Task(
-    name="task4",
-    start=date(2021, 3, 1),
-    duration=12,
-    resources=[Ben, Alex],
-    color="#a3ddcb",
-)
-
-project_1 = gantt.Project(name="Project 1")
-
-
-for task in [task1_project1, task2_project1, task3_project1, task4_project1]:
-    project_1.add_task(task)
-
-project_1.make_svg_for_resources(
-    filename="hello.html",
-    today=date(2021, 1, 27),
-    start=date(2021, 1, 20),
-    end=date(2021, 4, 1),
-)
+if __name__ == '__main__':
+    gantt.define_font_attributes(
+        fill='black', stroke='black', stroke_width=0, font_family='Verdana'
+    )
+    a = Hello(
+        project_name='asdf',
+        task_name='fff',
+        task_color='#a3ddcb',
+        start_date=date(2021, 1, 27),
+        task_duration=2,
+        resources=['hello', '123'],
+    )
+    a.task()
+    a.register_task()
+    a.export()
